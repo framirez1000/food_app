@@ -6,9 +6,6 @@ node_js:
 services:
   - postgresql
 
-install:
-  - yarn install
-
 before_script:
   - psql -c "create database ordering_app_test_db;" -U postgres
 
