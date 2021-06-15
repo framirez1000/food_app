@@ -1,15 +1,16 @@
 {
   "name": "food_app",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "index.js",
   "repository": "https://github.com/framirez1000/food_app.git",
+  "author": "Fran Gil <framicon@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/node": "^7.14.2",
+    "@babel/core": "^7.14.5",
+    "@babel/node": "^7.14.5",
     "@babel/plugin-syntax-class-properties": "^7.12.13",
-    "@babel/plugin-transform-runtime": "^7.14.3",
-    "@babel/preset-env": "^7.14.4",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.5",
     "babel-eslint": "^10.1.0",
     "babel-plugin-istanbul": "^6.0.0",
     "bcrypt": "^5.0.1",
@@ -20,33 +21,41 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
-    "make-runnable": "^1.3.9",
+    "make-runnable": "^1.3.10",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
     "pg": "^8.6.0",
-    "pg-hstore": "^2.3.3",
+    "pg-hstore": "^2.3.4",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
-    "sequelize-test-helpers": "^1.3.3"
+    "sequelize-test-helpers": "^1.3.3",
+    "twilio": "^3.63.1"
   },
   "devDependencies": {
-    "@babel/register": "^7.13.16",
+    "@babel/register": "^7.14.5",
     "chai": "^4.3.4",
     "chai-http": "^4.3.0",
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.3",
-    "eslint": "^7.27.0",
+    "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
-    "mocha": "^8.4.0",
+    "mocha": "^9.0.0",
     "mocha-lcov-reporter": "^1.3.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0"
   },
-    "scripts": {
+  "scripts": {
     "start": "babel-node ./src/server.js",
     "dev": "cross-env NODE_ENV=development && nodemon --exec babel-node ./src/server.js",
-    "dev-test": "cross-env NODE_ENV=test && nyc mocha --require @babel/register ./tests/*.js --exit",
-    "test": "cross-env NODE_ENV=test && nyc --reporter=lcov mocha --require @babel/register ./tests/*.js --exit"
+    "dev-test": "cross-env NODE_ENV=test yarn run-devTest ",
+    "run-devTest": "yarn pretest && nyc mocha --require @babel/register ./tests/*.js --timeout 8000 --exit",
+    "test": "cross-env NODE_ENV=test yarn run-test", 
+    "run-test": "nyc --reporter=lcov mocha --require @babel/register ./tests/*.js --timeout 8000 --exit",
+    "create-db": "npx sequelize-cli db:create",
+    "drop-db": "npx sequelize-cli db:drop",
+    "migrate": "npx sequelize-cli db:migrate",
+    "pretest": "yarn drop-db && yarn create-db && yarn migrate",
+    "heroku-postbuild": "yarn migrate"
   }
 }
