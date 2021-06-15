@@ -12,7 +12,7 @@ before_script:
   - yarn install
   - psql -c "CREATE USER fooduser WITH PASSWORD 'foodUser';" -U postgres
   - psql -c "ALTER USER fooduser CREATEDB;" -U postgres
-  - psql -c "CREATE DATABASE ordering_app_test_db;" -U postgres
+  - psql -c "CREATE DATABASE fooduser;" -U fooduser
 
 script:
   - yarn test
