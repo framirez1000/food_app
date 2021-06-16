@@ -3,9 +3,7 @@ import path from 'path';
 //
 //import '../config/loadEnv';
 import dotenv from 'dotenv';
-//import { config } from 'dotenv';
 import { Sequelize } from 'sequelize';
-//require('dotenv').config();
 
 dotenv.config({ silent: process.env.NODE_ENV === 'test' });
 
@@ -17,7 +15,7 @@ const env = process.env.NODE_ENV;
 //console.log('Config: ' + util.inspect(process.env.NODE_ENV));
 const config = require('../config/config.js')[env];
 const db = {};
-//console.log('Config: ' + process.env + config);
+console.log('ConfigUsername + env: ' + config.username + env);
 const sequelize = new Sequelize(config.database, config.username, config.password, config);
 //var sequelize = new Sequelize(process.env.DEV_DB_DATABASE, process.env.DEV_DB_USERNAME, process.env.DEV_DB_PASSWORD, config);
 
