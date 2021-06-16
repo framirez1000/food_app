@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 //
-import '../config/loadEnv';
-//import dotenv from 'dotenv';
+//import '../config/loadEnv';
+import dotenv from 'dotenv';
 //import { config } from 'dotenv';
 import { Sequelize } from 'sequelize';
 //require('dotenv').config();
 
-//dotenv.config({ silent: process.env.NODE_ENV === 'test' });
+dotenv.config({ silent: process.env.NODE_ENV === 'test' });
 
 var util = require('util');
 
