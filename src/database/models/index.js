@@ -15,8 +15,7 @@ DB connection
 const env = process.env.NODE_ENV;
 const configDb = require('../config/config.js')[env];
 const pool = require('../config/config.js')['pool'];
-console.log("Connection to DB: env & DB " + env + "  " +
-util.inspect(configDb));
+console.log("Connection to DB: env & DB " + env + "  " + util.inspect(configDb));
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(configDb.database, configDb.username, configDb.password, {
   host: configDb.host,
