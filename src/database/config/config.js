@@ -1,6 +1,7 @@
 
-import dotenv from 'dotenv';
-dotenv.config();
+//import dotenv from 'dotenv';
+//dotenv.config();
+require("dotenv").config();
 
 const {
   DEV_DB_USERNAME,
@@ -21,7 +22,7 @@ const {
 } = process.env;
 
 module.exports = {
-  development: {
+  dev: {
     username: DEV_DB_USERNAME,
     password: DEV_DB_PASSWORD,
     database: DEV_DB_NAME,
@@ -38,7 +39,7 @@ module.exports = {
     dialect: 'postgres',
     logging: false,
   },
-  production: {
+  prod: {
     username: PROD_DB_USERNAME,
     password: PROD_DB_PASSWORD,
     database: PROD_DB_NAME,
@@ -46,5 +47,11 @@ module.exports = {
     port: PROD_DB_PORT,
     dialect: 'postgres',
     logging: false,
+  },
+  pool: {
+    max: 10,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
   },
 };
