@@ -121,7 +121,7 @@ describe('SIGN UP', () => {
         done();
       });
   });
-  it('Signup with existing phone number should return 409', (done) => {
+  /*it('Signup with existing phone number should return 409', (done) => {
     chai
       .request(server)
       .post(`${baseUrl}signup`)
@@ -140,7 +140,7 @@ describe('SIGN UP', () => {
         expect(error).to.equal(signupConflict);
         done();
       });
-  });
+  });*/
 });
 /*
 describe('VERIFY SIGNUP', () => {

@@ -13,7 +13,7 @@ const {
 
 const authRoutes = express.Router();
 
-authRoutes.post('/signup', validateSignup, isUserRegistered, signUp);
+authRoutes.post('/signup', validateSignup, /*isUserRegistered,*/ signUp);
 authRoutes.get('/verify', validateVerifyOTP, checkUserToken, checkOTP, verify);
 authRoutes.get('/verify/retry', checkUserToken, resendOTP);
 
