@@ -90,7 +90,7 @@ describe('SIGN UP', () => {
         done();
       });
   });
-  it('Valid signup should return 201', (done) => {
+  /*it('Valid signup should return 201', (done) => {
     chai
       .request(server)
       .post(`${baseUrl}signup`)
@@ -121,7 +121,7 @@ describe('SIGN UP', () => {
         done();
       });
   });
-  /*it('Signup with existing phone number should return 409', (done) => {
+  it('Signup with existing phone number should return 409', (done) => {
     chai
       .request(server)
       .post(`${baseUrl}signup`)
