@@ -142,7 +142,7 @@ describe('SIGN UP', () => {
       });
   });
 });
-/*
+
 describe('VERIFY SIGNUP', () => {
   it('Empty request should return 400', (done) => {
     chai
@@ -264,4 +264,4 @@ describe('VERIFY SIGNUP', () => {
         done();
       });
   });
-});*/
+});
