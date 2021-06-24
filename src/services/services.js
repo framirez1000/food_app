@@ -1,4 +1,4 @@
-  const saveData = async (model, obj) => {
+const saveData = async (model, obj) => {
     const data = await model.create(obj);
     return data.dataValues;
   };
@@ -9,7 +9,6 @@
         where: condition,
         include: [{ all: true }],
       });
-    console.log('findByCond: ' + data);
     return data;
   };
   
@@ -23,14 +22,8 @@
     return updated[1];
   };
   
-  const saveManyRows = async (model, obj) => {
-    const data = await model.bulkCreate(obj);
-    return data;
-  };
-  
   export default {
     saveData,
     findByCondition,
     updateByCondition,
-    saveManyRows,
   };

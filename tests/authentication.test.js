@@ -116,14 +116,12 @@ describe('SIGN UP', () => {
         expect(data).to.haveOwnProperty('otp');
         expect(data.status).to.be.a('boolean');
         expect(data.status).to.equal(false);
-        expect(data).to.haveOwnProperty('role');
-        expect(data.role).to.equal('customer');
         userToken = token;
         userOTP = data.otp;
         done();
       });
   });
-  /*it('Signup with existing phone number should return 409', (done) => {
+  it('Signup with existing phone number should return 409', (done) => {
     chai
       .request(server)
       .post(`${baseUrl}signup`)
@@ -142,9 +140,9 @@ describe('SIGN UP', () => {
         expect(error).to.equal(signupConflict);
         done();
       });
-  });*/
+  });
 });
-
+/*
 describe('VERIFY SIGNUP', () => {
   it('Empty request should return 400', (done) => {
     chai
@@ -266,4 +264,4 @@ describe('VERIFY SIGNUP', () => {
         done();
       });
   });
-});
+});*/
