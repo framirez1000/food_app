@@ -4,6 +4,8 @@ import messages from '../utils/messages';
 import misc from '../helpers/misc';
 import services from '../services/services';
 import models from '../database/models';
+import redisClient from '../config/redisConfig';
+import roles from '../utils/roles';
 
 
 const {
@@ -16,6 +18,8 @@ const {
   signupSuccessful, 
   verifySuccessful,
   resendOTPSuccessful,
+  loginSuccessful,
+  logoutSuccessful,
 } = messages;
 const {
   successResponse,
@@ -27,6 +31,7 @@ const {
 } = misc;
 const { saveData, updateByCondition } = services;
 const { User } = models;
+const {CUSTOMER} = roles;
 
 
 var util = require('util');
@@ -49,15 +54,16 @@ export default class Authentication {
         address,
         password: hashedPassword,
         otp: otpCode,
+        role: CUSTOMER,
       };
       
       // Save user data in db
       const data = await saveData(User, userObject);
       
       // Send OTP code via SMS to user's phone number
-      if (process.env.NODE_ENV === 'production') {
+      //if (process.env.NODE_ENV === 'production') {
         await sendOTP(phoneNumber, `${otpMessage} ${otpCode}`);
-      }
+      //}
       
       // Prepare user data to return in response
       const userData = _.omit(data, ['id', 'password']);
@@ -91,12 +97,33 @@ export default class Authentication {
     try {
       const { phoneNumber } = req.userData;
       const otpCode = await generateOTP();
-      if (process.env.NODE_ENV === 'production') {
+      //if (process.env.NODE_ENV === 'production') {
         await sendOTP(phoneNumber, `${otpMessage} ${otpCode}`);
-      }
+      //}
       return successResponse(res, success, resendOTPSuccessful, null, null);
     } catch (error) {
       return errorResponse(res, serverError, error);
+    }
+  };
+
+  static login = async (req, res) => {
+    try {
+      const tokenData = _.omit(req.userData, ['password', 'otp']);
+      const token = await generateToken(tokenData);
+      const data = _.omit(req.userData, ['id', 'password', 'otp']);
+      return successResponse(res, success, loginSuccessful, token, data);
+    } catch (error) {
+      return errorResponse(res, serverError, error);
+    }
+  };
+
+  static logout = async (req, res) => {
+    try {
+      const token = req.get('authorization').split(' ').pop();
+      redisClient.sadd('token', token);
+      return successResponse(res, success, logoutSuccessful, null, null);
+    } catch (error) {
+      return errorResponse(res, unauthorized, loginUserWrongCredentials);
     }
   };
 
