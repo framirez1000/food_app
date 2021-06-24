@@ -72,6 +72,7 @@ const checkOTP = async (req, res, next) => {
 
 const validateLogin = async (req, res, next) => {
   const { error } = login(req.body);
+  //console.log('Validation passw: ' + error);
   returnErrorMessages(error, res, next);
 };
 
@@ -79,12 +80,18 @@ const checkLogin = async (req, res, next) => {
   try {
     const { phoneNumber, password } = req.body;
     const condition = { phoneNumber };
+    //console.log('Password match phone: ' + User);
     const userData = await findByCondition(User, condition);
+    
     if (!userData) {
+      console.log('Password match userData: ' + userData);
       return errorResponse(res, notFound, loginUserNotFound);
     }
+
     const dbPassword = userData.dataValues.password;
+    //console.log('Password: ' + password + ' dbPassword: ' + dbPassword);
     const passwordsMatch = await isPasswordValid(password, dbPassword);
+    //console.log('Password match: ' + passwordsMatch);
     if (!passwordsMatch) {
       return errorResponse(res, unauthorized, loginUserWrongCredentials);
     }
