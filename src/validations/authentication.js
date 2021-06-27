@@ -115,6 +115,7 @@ const login = (data) => {
 };
 
 export default {
+  createErrorMessages,
   signup,
   verifyOTP,
   login,
