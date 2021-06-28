@@ -56,7 +56,7 @@ const findUserOrderById = async (req, res, next) => {
       return errorResponse(res, notFound, orderNotFound);
     }
     req.orderData = orderData.dataValues;
-    console.log('Midlwr Find Ids2: ' + orderData.dataValues);
+    //console.log('Midlwr Find Ids2: ' + orderData.dataValues);
     return next();
   } catch (error) {
     return errorResponse(res, serverError, error);
