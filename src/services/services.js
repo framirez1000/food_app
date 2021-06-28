@@ -27,6 +27,7 @@
     const data = await model.bulkCreate(obj);
     return data;
   };
+
   var util = require('util');
   const findOrderByConditionAll = async (model, condition, contents, user) => {
     console.log('Service: Findby cond: ' + condition);

@@ -3,7 +3,9 @@ import chaiHttp from 'chai-http';
 import server from '../src/server';
 import statusCodes from '../src/utils/statusCodes';
 import messages from '../src/utils/messages';
+
 var util = require('util');
+
 
 const {
   badRequest,
@@ -24,6 +26,7 @@ const {
 } = messages;
 const baseUrl = '/api/orders';
 const adminUrl = '/api/admin/orders';
+
 
 chai.use(chaiHttp);
 chai.should();
@@ -85,6 +88,7 @@ describe('ADMIN GET UNEXISTANT ORDER', () => {
         });
     });
   });
+
 
 describe('CUSTOMER PLACE ORDER', () => {
   it('Valid login should return 200', (done) => {
@@ -218,7 +222,9 @@ describe('CUSTOMER PLACE ORDER', () => {
         done();
       });
   });
+
   /*it('Valid place order should return 201', (done) => {
+
     chai
       .request(server)
       .post(baseUrl)
@@ -256,6 +262,7 @@ describe('CUSTOMER PLACE ORDER', () => {
         expect(data.status).to.equal('pending');
         done();
       });
+
   });*/
 });
 
@@ -513,3 +520,6 @@ describe('CUSTOMER GET ORDER', () => {
         });
     });
   });
+  });
+});
+
