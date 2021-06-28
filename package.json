@@ -66,5 +66,6 @@
     "create-admin": "babel-node ./src/database/scripts/adminScript.js",
     "seed": "npx sequelize-cli db:seed:all",
     "create-menus": "cross-env NODE_ENV=dev babel-node ./src/database/scripts/menusScript.js"
+
   }
 }

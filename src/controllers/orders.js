@@ -1,3 +1,5 @@
+
+import _ from 'lodash';
 import statusCodes from '../utils/statusCodes';
 import messages from '../utils/messages';
 import misc from '../helpers/misc';
@@ -7,6 +9,7 @@ import models from '../database/models';
 const {
   created,
   serverError,
+  success,
 } = statusCodes;
 const { orderSuccess } = messages;
 const {
@@ -36,4 +39,24 @@ export default class Orders {
       return errorResponse(res, serverError, error);
     }
   };
+
+  static getSpecificOrder = async (req, res) => {
+    try {
+      console.log('Fetching order Ok');
+      return successResponse(res, success, null, null, req.orderData);
+    } catch (error) {
+        console.log('Fetching order Not Ok');
+        return errorResponse(res, serverError, error);
+    }
+  };
+
+  static getOrdersList = async(req, res) => {
+      try {
+        console.log('Controller getOrdersList Ok: ' + res);
+        return successResponse(res, success, null, null, req.ordersList);
+      } catch (error) {
+        console.log('Controller getOrdersList Not Ok: ' + error);
+        return errorResponse(res, serverError, error);
+      }
+  }
 };

@@ -252,7 +252,7 @@ describe('VERIFY SIGNUP', () => {
         done();
       });
   });
-  it('Resend OTP should return 200', (done) => {
+  /*it('Resend OTP should return 200', (done) => {
     chai
       .request(server)
       .get(`${baseUrl}verify/retry`)
@@ -265,5 +265,5 @@ describe('VERIFY SIGNUP', () => {
         expect(message).to.equal(resendOTPSuccessful);
         done();
       });
-  });
+  });*/
 });

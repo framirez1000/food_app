@@ -27,10 +27,60 @@
     const data = await model.bulkCreate(obj);
     return data;
   };
+
+  var util = require('util');
+  const findOrderByConditionAll = async (model, condition, contents, user) => {
+    console.log('Service: Findby cond: ' + condition);
+    const data = await model.findOne(
+      {
+        where: condition,
+        include: [
+          { model: contents },
+          {
+            model: user,
+            attributes: [
+              'id',
+              'firstName',
+              'lastName',
+              'phoneNumber',
+              'address',
+            ],
+          },
+        ],
+      });
+    //if (data) {console.log('Service: Findby cond DATA: ' + util.inspect(data));}
+    return data;
+  };
+
+  const findAllOrders = async (model, contents, user) => {
+    const data = await model.findAll(
+      {
+        order: [
+          ['id', 'DESC'],
+        ],
+        include: [
+          { model: contents },
+          {
+            model: user,
+            attributes: [
+              'id',
+              'firstName',
+              'lastName',
+              'phoneNumber',
+              'address',
+              'createdAt',
+            ],
+          },
+        ],
+      });
+    return data;
+  };
   
   export default {
     saveData,
     findByCondition,
     updateByCondition,
     saveManyRows,
+    findOrderByConditionAll,
+    findAllOrders,
   };
