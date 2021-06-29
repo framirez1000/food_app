@@ -12,6 +12,7 @@ const {
   success,
   created,
   notFound,
+  conflict,
 } = statusCodes;
 const {
   loginSuccessful,
@@ -23,6 +24,10 @@ const {
   invalidId,
   orderNotFound,
   ordersListNotFound,
+  orderUpdateSuccess,
+  orderUpdateConflict,
+  orderUpdateInvalidStatus,
+  orderUpdateEmptyStatus,
 } = messages;
 const baseUrl = '/api/orders';
 const adminUrl = '/api/admin/orders';
@@ -223,7 +228,7 @@ describe('CUSTOMER PLACE ORDER', () => {
       });
   });
 
-  /*it('Valid place order should return 201', (done) => {
+  it('Valid place order should return 201', (done) => {
 
     chai
       .request(server)
@@ -263,7 +268,7 @@ describe('CUSTOMER PLACE ORDER', () => {
         done();
       });
 
-  });*/
+  });
 });
 
 // Customer get order *****************************
@@ -317,7 +322,7 @@ describe('CUSTOMER GET ORDER', () => {
           done();
         });
     });
-    /*it('Valid place order should return 201', (done) => {
+    it('Valid place order should return 201', (done) => {
       chai
         .request(server)
         .post(baseUrl)
@@ -355,7 +360,7 @@ describe('CUSTOMER GET ORDER', () => {
           expect(data.status).to.equal('pending');
           done();
         });
-    });*/
+    });
     it('Valid order found should return 200', (done) => {
       chai
         .request(server)
@@ -498,7 +503,7 @@ describe('CUSTOMER GET ORDER', () => {
           expect(data[0]).to.haveOwnProperty('id');
           expect(data[0].id).to.be.a('number');
           console.log("Test ordersList " + util.inspect(data[0].id));
-          expect(data[0].id).to.equal(17);
+          expect(data[0].id).to.equal(2);
           expect(data[0]).to.haveOwnProperty('total');
           expect(data[0]).to.haveOwnProperty('status');
           expect(data[0].status).to.equal('pending');
@@ -521,4 +526,151 @@ describe('CUSTOMER GET ORDER', () => {
     });
   });
 
-
+  describe('ADMIN UPDATE ORDER', () => {
+    it('Invalid order status should return 400', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/2`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'something',
+        })
+        .end((err, res) => {
+          if (err) done(err);
+          const { error } = res.body;
+          expect(res.status).to.equal(badRequest);
+          expect(error);
+          expect(error).to.equal(orderUpdateInvalidStatus);
+          done();
+        });
+    });
+    it('Missing order status should return 400', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/2`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .end((err, res) => {
+          if (err) done(err);
+          const { error } = res.body;
+          expect(res.status).to.equal(badRequest);
+          expect(error);
+          expect(error).to.equal(orderUpdateEmptyStatus);
+          done();
+        });
+    });
+    it('Unexistant order should return 404', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/200`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'accepted',
+        })
+        .end((err, res) => {
+          if (err) done(err);
+          const { error } = res.body;
+          expect(res.status).to.equal(notFound);
+          expect(error);
+          expect(error).to.equal(orderNotFound);
+          done();
+        });
+    });
+    it('Accepted order should return 200', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/2`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'accepted',
+        })
+        .end((err, res) => {
+          if (err) done(err);
+          const { message, data } = res.body;
+          expect(res.status).to.equal(success);
+          expect(message);
+          expect(message).to.equal(orderUpdateSuccess);
+          expect(data);
+          expect(data).to.be.a('object');
+          expect(data).to.haveOwnProperty('id');
+          expect(data.id).to.be.a('number');
+          expect(data.id).to.equal(2);
+          expect(data).to.haveOwnProperty('total');
+          expect(data).to.haveOwnProperty('status');
+          expect(data.status).to.equal('accepted');
+          expect(data).to.haveOwnProperty('paymentId');
+          expect(data).to.haveOwnProperty('userId');
+          done();
+        });
+    });
+    it('Existing order status should return 409', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/2`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'accepted',
+        })
+        .end((err, res) => {
+          if (err) done(err);
+          const { error } = res.body;
+          expect(res.status).to.equal(conflict);
+          expect(error);
+          expect(error).to.equal(orderUpdateConflict);
+          done();
+        });
+    });
+    it('On the move order should return 200', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/2`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'onthemove',
+        })
+        .end((err, res) => {
+          if (err) done(err);
+          const { message, data } = res.body;
+          expect(res.status).to.equal(success);
+          expect(message);
+          expect(message).to.equal(orderUpdateSuccess);
+          expect(data);
+          expect(data).to.be.a('object');
+          expect(data).to.haveOwnProperty('id');
+          expect(data.id).to.be.a('number');
+          expect(data.id).to.equal(2);
+          expect(data).to.haveOwnProperty('total');
+          expect(data).to.haveOwnProperty('status');
+          expect(data.status).to.equal('onthemove');
+          expect(data).to.haveOwnProperty('paymentId');
+          expect(data).to.haveOwnProperty('userId');
+          done();
+        });
+    });
+    it('Completed order should return 200', (done) => {
+      chai
+        .request(server)
+        .patch(`${adminUrl}/2`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          status: 'completed',
+        })
+        .end((err, res) => {
+          if (err) done(err);
+          const { message, data } = res.body;
+          expect(res.status).to.equal(success);
+          expect(message);
+          expect(message).to.equal(orderUpdateSuccess);
+          expect(data);
+          expect(data).to.be.a('object');
+          expect(data).to.haveOwnProperty('id');
+          expect(data.id).to.be.a('number');
+          expect(data.id).to.equal(2);
+          expect(data).to.haveOwnProperty('total');
+          expect(data).to.haveOwnProperty('status');
+          expect(data.status).to.equal('completed');
+          expect(data).to.haveOwnProperty('paymentId');
+          expect(data).to.haveOwnProperty('userId');
+          done();
+        });
+    });
+  });

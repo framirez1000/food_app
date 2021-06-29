@@ -86,7 +86,30 @@ const getOrder = (data) => {
     });
   };
   
-  export default {
-    placeOrder,
-    getOrder,
-  };
+/**
+ * @description Validates if the status property of is one of (accepted, onthemove, or completed
+ * @param {object} data
+ * @returns {object} Validation result object
+ */
+const updateOrder = (data) => {
+  console.log('Validate updateOrder data: ' + data);
+  const schema = Joi.object({
+    status: Joi.string().regex(/^(accepted|onthemove|completed)$/).required().messages(createErrorMessages(
+      'string',
+      `${messages.orderUpdateEmptyStatus}`,
+      `${messages.orderUpdateInvalidStatus}`,
+      `${messages.orderUpdateInvalidStatus}`,
+      `${messages.orderUpdateInvalidStatus}`,
+    )),
+  });
+  return schema.validate(data, {
+    abortEarly: false,
+    allowUnknown: false,
+  });
+};
+
+export default {
+  placeOrder,
+  getOrder,
+  updateOrder,
+};

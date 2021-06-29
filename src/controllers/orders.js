@@ -11,13 +11,13 @@ const {
   serverError,
   success,
 } = statusCodes;
-const { orderSuccess } = messages;
+const { orderSuccess, orderUpdateSuccess } = messages;
 const {
   successResponse,
   errorResponse,
   parseOrderContents,
 } = misc;
-const { saveData, saveManyRows } = services;
+const { saveData, saveManyRows, updateByCondition } = services;
 const { Order, Contents } = models;
 
 export default class Orders {
@@ -50,13 +50,35 @@ export default class Orders {
     }
   };
 
-  static getOrdersList = async(req, res) => {
-      try {
-        console.log('Controller getOrdersList Ok: ' + res);
-        return successResponse(res, success, null, null, req.ordersList);
-      } catch (error) {
-        console.log('Controller getOrdersList Not Ok: ' + error);
-        return errorResponse(res, serverError, error);
-      }
-  }
+  /**
+   * @description method that returns the list of all orders
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} Success | error response object
+   */
+   static getOrdersList = async (req, res) => {
+    try {
+      return successResponse(res, success, null, null, req.ordersList);
+    } catch (error) {
+      return errorResponse(res, serverError, error);
+    }
+  };
+
+  /**
+   * @description Method that returns the updated order
+   * @param {object} req
+   * @param {object} res
+   * @returns {object} Success | error response object
+   */
+  static updateOrder = async (req, res) => {
+    try {
+      const { status } = req.body;
+      const condition = { id: req.orderData.id };
+      const data = { status };
+      const { dataValues } = await updateByCondition(Order, data, condition);
+      return successResponse(res, success, orderUpdateSuccess, null, dataValues);
+    } catch (error) {
+      return errorResponse(res, serverError, error);
+    }
+  };
 };
